@@ -509,3 +509,348 @@ function showPb(id,btn){
   btn.classList.add('on');
 }
 </script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:20px 0 40px;font-family:var(--font-sans,sans-serif)}
+.tab-row{display:flex;gap:0;border-bottom:1px solid var(--color-border-tertiary);margin-bottom:20px}
+.tab{font-size:13px;font-weight:500;padding:9px 16px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;background:transparent;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--color-text-primary)}
+.tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary)}
+.pnl{display:none}.pnl.on{display:block}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;margin-bottom:16px}
+.bp{background:#EEEDFE;color:#3C3489}.bt{background:#E1F5EE;color:#085041}.bc{background:#FAECE7;color:#712B13}
+@media(prefers-color-scheme:dark){.bp{background:#3C3489;color:#CECBF6}.bt{background:#085041;color:#9FE1CB}.bc{background:#712B13;color:#F5C4B3}}
+.sl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-tertiary);margin:22px 0 10px}
+.legend{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--color-text-secondary)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tier-block{border:0.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.tier-hd{display:grid;grid-template-columns:150px 1fr;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tier-hd:last-child{border-bottom:none}
+.tier-lbl{padding:10px 13px;font-size:12px;font-weight:500;color:var(--color-text-primary);border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);display:flex;flex-direction:column;gap:3px}
+.tier-lbl span{font-size:10px;font-weight:400;color:var(--color-text-tertiary)}
+.tier-body{padding:10px 13px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:11px;padding:3px 9px;border-radius:8px;border:0.5px solid;line-height:1.3}
+.chip-t1{background:#EEEDFE;border-color:#AFA9EC;color:#3C3489}
+.chip-t2{background:#E1F5EE;border-color:#5DCAA5;color:#085041}
+.chip-t3{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.chip-t4{background:#F1EFE8;border-color:#B4B2A9;color:#444441}
+.chip-t1b{background:#FAECE7;border-color:#F0997B;color:#712B13}
+.chip-t2b{background:#E1F5EE;border-color:#5DCAA5;color:#085041}
+.chip-t3b{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.chip-t4b{background:#F1EFE8;border-color:#B4B2A9;color:#444441}
+@media(prefers-color-scheme:dark){
+  .chip-t1{background:#3C3489;border-color:#534AB7;color:#CECBF6}
+  .chip-t2{background:#085041;border-color:#1D9E75;color:#9FE1CB}
+  .chip-t3{background:#633806;border-color:#BA7517;color:#FAC775}
+  .chip-t4{background:#444441;border-color:#888780;color:#D3D1C7}
+  .chip-t1b{background:#712B13;border-color:#993C1D;color:#F5C4B3}
+  .chip-t2b{background:#085041;border-color:#1D9E75;color:#9FE1CB}
+  .chip-t3b{background:#633806;border-color:#BA7517;color:#FAC775}
+  .chip-t4b{background:#444441;border-color:#888780;color:#D3D1C7}
+}
+.conf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.conf-card{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:13px;background:var(--color-background-secondary)}
+.conf-card h4{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.conf-card .meta{font-size:11px;color:var(--color-text-tertiary);margin-bottom:7px}
+.conf-card p{font-size:12px;color:var(--color-text-secondary);line-height:1.45}
+.conf-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;margin-right:4px;margin-bottom:4px;font-weight:500}
+.ct-p{background:#EEEDFE;color:#3C3489}.ct-t{background:#E1F5EE;color:#085041}.ct-c{background:#FAECE7;color:#712B13}.ct-all{background:#F1EFE8;color:#444441}
+@media(prefers-color-scheme:dark){
+  .ct-p{background:#3C3489;color:#CECBF6}.ct-t{background:#085041;color:#9FE1CB}.ct-c{background:#712B13;color:#F5C4B3}.ct-all{background:#444441;color:#D3D1C7}
+}
+.univ-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.univ-card{border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:12px;background:var(--color-background-secondary)}
+.univ-card h4{font-size:12px;font-weight:500;margin-bottom:4px}
+.univ-card p{font-size:11px;color:var(--color-text-tertiary);line-height:1.4}
+</style>
+
+<div class="w">
+<div class="tab-row">
+  <button class="tab on" onclick="show('a',this)">A · Research / Frontier</button>
+  <button class="tab" onclick="show('b',this)">B · Engineering / Productization</button>
+  <button class="tab" onclick="show('c',this)">C · Platform / Infrastructure</button>
+</div>
+
+<!-- ═══════ FAMILY A ═══════ -->
+<div class="pnl on" id="pa">
+  <span class="badge bp">A · Research / Frontier AI</span>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#7F77DD"></div>Tier 1 — hardest to convert, highest signal</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1D9E75"></div>Tier 2 — strong profile, more convertible</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div>Tier 3 — adjacent / rising labs</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#888780"></div>Tier 4 — academic &amp; non-traditional pools</div>
+  </div>
+
+  <p class="sl">Companies by tier</p>
+  <div class="tier-block">
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 1<span>Frontier labs</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t1">OpenAI</span><span class="chip chip-t1">Anthropic</span><span class="chip chip-t1">Google DeepMind</span><span class="chip chip-t1">Meta FAIR</span><span class="chip chip-t1">Microsoft Research</span><span class="chip chip-t1">Apple ML Research</span><span class="chip chip-t1">Amazon Science</span><span class="chip chip-t1">xAI</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 2<span>Hyperscaler research</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t2">Google Brain (merged DeepMind)</span><span class="chip chip-t2">AWS AI Labs</span><span class="chip chip-t2">NVIDIA Research</span><span class="chip chip-t2">IBM Research</span><span class="chip chip-t2">Samsung AI</span><span class="chip chip-t2">Baidu Research</span><span class="chip chip-t2">Tencent AI Lab</span><span class="chip chip-t2">ByteDance AI Lab</span><span class="chip chip-t2">Adobe Research</span><span class="chip chip-t2">Salesforce Research</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 3<span>Well-funded AI research startups</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3">Mistral AI</span><span class="chip chip-t3">Cohere</span><span class="chip chip-t3">Inflection AI</span><span class="chip chip-t3">Adept AI</span><span class="chip chip-t3">Character.AI</span><span class="chip chip-t3">Runway ML</span><span class="chip chip-t3">Stability AI</span><span class="chip chip-t3">Aleph Alpha</span><span class="chip chip-t3">AI21 Labs</span><span class="chip chip-t3">Hugging Face</span><span class="chip chip-t3">Together AI</span><span class="chip chip-t3">Nous Research</span><span class="chip chip-t3">EleutherAI</span><span class="chip chip-t3">Allen Institute for AI (AI2)</span><span class="chip chip-t3">Sakana AI</span><span class="chip chip-t3">Imbue</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 3<span>NLP / vision focused</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3">Grammarly AI</span><span class="chip chip-t3">Duolingo AI</span><span class="chip chip-t3">Reka AI</span><span class="chip chip-t3">Contextual AI</span><span class="chip chip-t3">Perceive</span><span class="chip chip-t3">Twelve Labs</span><span class="chip chip-t3">Sora / Pika (video gen)</span><span class="chip chip-t3">ElevenLabs</span><span class="chip chip-t3">AssemblyAI</span><span class="chip chip-t3">Deepgram</span>
+      </div></div>
+    </div>
+    <div class="tier-hd" style="border-bottom:none">
+      <div class="tier-lbl">Tier 4<span>Academic labs &amp; institutes</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t4">MIT CSAIL</span><span class="chip chip-t4">Stanford HAI</span><span class="chip chip-t4">CMU ML Dept</span><span class="chip chip-t4">Berkeley BAIR</span><span class="chip chip-t4">Toronto Vector Institute</span><span class="chip chip-t4">Oxford Future of Humanity</span><span class="chip chip-t4">Cambridge ML Group</span><span class="chip chip-t4">ETH Zürich AI Center</span><span class="chip chip-t4">Mila (Montreal)</span><span class="chip chip-t4">NYU CILVR</span><span class="chip chip-t4">Caltech CMS</span><span class="chip chip-t4">UW Allen School</span><span class="chip chip-t4">EPFL AI lab</span><span class="chip chip-t4">Alan Turing Institute (UK)</span><span class="chip chip-t4">Turing Institute (Canada)</span>
+      </div></div>
+    </div>
+  </div>
+
+  <p class="sl">Conferences — where researchers surface</p>
+  <div class="conf-grid">
+    <div class="conf-card">
+      <h4>NeurIPS</h4><div class="meta">Annual · Dec · Vancouver / virtual<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Largest ML conference. Target poster presenters, workshop speakers, and oral paper authors. Sponsor tracks give access to attendee lists. Best sourcing window: Oct–Nov pre-conference CFP period.</p>
+    </div>
+    <div class="conf-card">
+      <h4>ICML</h4><div class="meta">Annual · Jul · Rotating global<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Core ML theory and methods. Target authors in LLM, RL, and optimisation tracks. Workshop co-organisers are senior researchers open to relationships outside their current org.</p>
+    </div>
+    <div class="conf-card">
+      <h4>ICLR</h4><div class="meta">Annual · May · Rotating global<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Highly selective. Acceptance = strong signal. Outstanding paper award authors are top-1% targets. Spotlight and oral presentations are the primary sourcing list.</p>
+    </div>
+    <div class="conf-card">
+      <h4>CVPR</h4><div class="meta">Annual · Jun · Rotating US<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Top computer vision venue. Critical for vision-language model researchers, video generation, and multimodal AI. 10,000+ attendees — focus on oral and best paper tracks.</p>
+    </div>
+    <div class="conf-card">
+      <h4>ACL / EMNLP / NAACL</h4><div class="meta">Annual · Rotating<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>NLP-specific conferences. Essential for LLM researchers, alignment work, and language understanding. EMNLP tends to attract more applied / industry-adjacent talent than ACL.</p>
+    </div>
+    <div class="conf-card">
+      <h4>AAAI</h4><div class="meta">Annual · Feb · Rotating US<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Broad AI — planning, reasoning, knowledge representation. Useful for researchers working on agents, symbolic AI, and neuro-symbolic approaches alongside deep learning.</p>
+    </div>
+    <div class="conf-card">
+      <h4>ECCV / ICCV</h4><div class="meta">Biennial · Rotating Europe / global<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>European / International computer vision. Strong for 3D, generative vision, and scene understanding researchers. Alternates with CVPR in even years.</p>
+    </div>
+    <div class="conf-card">
+      <h4>CoRL / RSS</h4><div class="meta">Annual<span class="conf-tag ct-p" style="margin-left:8px">Family A</span></div>
+      <p>Robotics + ML. Target if hiring for embodied AI, RL for robotics, or physical simulation research. Small, tight-knit community — relationships matter more than cold outreach here.</p>
+    </div>
+  </div>
+
+  <p class="sl">University labs — by research strength</p>
+  <div class="univ-grid">
+    <div class="univ-card"><h4>MIT CSAIL / MIT-IBM</h4><p>Deep learning, NLP, robotics, computer vision. Strong PhD placement into industry.</p></div>
+    <div class="univ-card"><h4>Stanford HAI / SAIL</h4><p>Foundation models, human-AI interaction, RL. Very strong industry connections via faculty.</p></div>
+    <div class="univ-card"><h4>CMU ML Dept / LTI</h4><p>NLP, speech, computer vision, ML systems. Largest dedicated ML dept in US.</p></div>
+    <div class="univ-card"><h4>Berkeley BAIR / CHAI</h4><p>RL, robotics, alignment. Home of PPO, RLHF foundations. Strong startup spinout culture.</p></div>
+    <div class="univ-card"><h4>Toronto / Vector Institute</h4><p>Deep learning birthplace (Hinton). Vector Institute is a dedicated AI research hub — strong pipeline.</p></div>
+    <div class="univ-card"><h4>Mila — Quebec AI Institute</h4><p>Yoshua Bengio's lab. Strong in generative models, GNNs, RL. Bilingual talent pool.</p></div>
+    <div class="univ-card"><h4>ETH Zürich AI Center</h4><p>Computer vision, 3D AI, robotics. Top European pipeline. English-language research environment.</p></div>
+    <div class="univ-card"><h4>Oxford / Cambridge</h4><p>NLP, Bayesian methods, AI safety. Strong for alignment-adjacent research talent.</p></div>
+    <div class="univ-card"><h4>NYU CDS / CILVR</h4><p>Yann LeCun's group. Self-supervised learning, vision, energy-based models.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ FAMILY B ═══════ -->
+<div class="pnl" id="pb">
+  <span class="badge bt">B · Engineering / Productization</span>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#1D9E75"></div>Tier 1 — core target, highest profile match</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#5DCAA5"></div>Tier 2 — strong adjacent, high convertibility</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div>Tier 3 — adjacent pools with LLM exposure</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#888780"></div>Tier 4 — internal &amp; non-traditional conversion</div>
+  </div>
+
+  <p class="sl">Companies by tier</p>
+  <div class="tier-block">
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 1<span>AI-native product cos</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t2b">Cursor</span><span class="chip chip-t2b">Replit</span><span class="chip chip-t2b">Perplexity</span><span class="chip chip-t2b">Glean</span><span class="chip chip-t2b">Notion AI</span><span class="chip chip-t2b">Intercom</span><span class="chip chip-t2b">Jasper</span><span class="chip chip-t2b">Writer</span><span class="chip chip-t2b">Cohere</span><span class="chip chip-t2b">Scale AI</span><span class="chip chip-t2b">Harvey AI</span><span class="chip chip-t2b">Moveworks</span><span class="chip chip-t2b">Aisera</span><span class="chip chip-t2b">Hebbia</span><span class="chip chip-t2b">Langchain</span><span class="chip chip-t2b">LlamaIndex</span><span class="chip chip-t2b">Dust</span><span class="chip chip-t2b">Coframe</span><span class="chip chip-t2b">Bardeen</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 1<span>Cloud AI platforms</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t2b">AWS Bedrock / SageMaker</span><span class="chip chip-t2b">Azure OpenAI Service</span><span class="chip chip-t2b">Google Vertex AI</span><span class="chip chip-t2b">Databricks</span><span class="chip chip-t2b">Snowflake ML</span><span class="chip chip-t2b">Salesforce Einstein</span><span class="chip chip-t2b">Oracle AI Services</span><span class="chip chip-t2b">IBM watsonx</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 2<span>Enterprise AI feature teams</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3b">Stripe ML</span><span class="chip chip-t3b">Plaid AI</span><span class="chip chip-t3b">Brex AI</span><span class="chip chip-t3b">Shopify AI</span><span class="chip chip-t3b">Figma AI</span><span class="chip chip-t3b">Canva AI</span><span class="chip chip-t3b">Zoom AI</span><span class="chip chip-t3b">HubSpot AI</span><span class="chip chip-t3b">Zendesk AI</span><span class="chip chip-t3b">Workday AI</span><span class="chip chip-t3b">ServiceNow AI</span><span class="chip chip-t3b">Veeva AI</span><span class="chip chip-t3b">Tempus</span><span class="chip chip-t3b">Epic Systems</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 2<span>Rec / search / personalisation</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3b">LinkedIn relevance eng</span><span class="chip chip-t3b">Spotify recs</span><span class="chip chip-t3b">Netflix personalisation</span><span class="chip chip-t3b">Pinterest visual search</span><span class="chip chip-t3b">DoorDash ML</span><span class="chip chip-t3b">Instacart ML</span><span class="chip chip-t3b">Twitter / X ranking</span><span class="chip chip-t3b">Reddit recs</span><span class="chip chip-t3b">Airbnb search</span><span class="chip chip-t3b">Etsy search</span><span class="chip chip-t3b">Wayfair ML</span><span class="chip chip-t3b">Booking.com ML</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 3<span>Vertical AI startups</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3">Abridge (health AI)</span><span class="chip chip-t3">Nabla</span><span class="chip chip-t3">Aidoc</span><span class="chip chip-t3">Instabase</span><span class="chip chip-t3">Cognition (Devin)</span><span class="chip chip-t3">Magic.dev</span><span class="chip chip-t3">Factory AI</span><span class="chip chip-t3">Augment Code</span><span class="chip chip-t3">Tabnine</span><span class="chip chip-t3">CodiumAI</span><span class="chip chip-t3">Synthesia</span><span class="chip chip-t3">D-ID</span><span class="chip chip-t3">Legaltech AI cos</span><span class="chip chip-t3">Fintech AI cos</span>
+      </div></div>
+    </div>
+    <div class="tier-hd" style="border-bottom:none">
+      <div class="tier-lbl">Tier 4<span>Adjacent engineering pools</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t4b">Google Search eng</span><span class="chip chip-t4b">Meta Feed ranking</span><span class="chip chip-t4b">Amazon Alexa</span><span class="chip chip-t4b">Apple Siri eng</span><span class="chip chip-t4b">Backend engineers who shipped LLM features</span><span class="chip chip-t4b">Former founders (AI products)</span><span class="chip chip-t4b">ML engineers → GenAI transition</span>
+      </div></div>
+    </div>
+  </div>
+
+  <p class="sl">Conferences &amp; communities — where engineers surface</p>
+  <div class="conf-grid">
+    <div class="conf-card">
+      <h4>AI Engineer Summit</h4><div class="meta">Annual · San Francisco<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>The primary conference for applied LLM / GenAI engineers. Speaker list is a sourcing goldmine — these are practitioners shipping production AI, not theorists. Highest-density event for this family.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Hacker News — Show HN &amp; Who's Hiring</h4><div class="meta">Monthly threads<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>Show HN posts by engineers building LLM tools are pre-qualified outreach targets. Monthly "Who's hiring" threads surface active candidates. Search HN user history for AI-related comments.</p>
+    </div>
+    <div class="conf-card">
+      <h4>LLM Meetups (local)</h4><div class="meta">Ongoing · All major tech hubs<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>SF AI Tinkerers, NYC LLM meetup, London LLM meetup, Berlin AI builders. Speakers and regular attendees self-select as active practitioners. Sponsor or co-host to get attendee access.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Hugging Face community</h4><div class="meta">Online + events<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>Model contributors, Space builders, dataset authors. Sort by downloads and activity. HF Discord and forums surface active contributors. HF community sprints are sourcing events in disguise.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Applied ML / MLOps Summit</h4><div class="meta">Annual<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>Practitioner-focused. Talks on RAG, evaluation frameworks, prompt engineering at scale, production LLM architecture. Less academic than NeurIPS — more directly relevant for Family B profiles.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Kaggle competitions</h4><div class="meta">Ongoing<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>NLP and LLM competition leaderboards surface strong applied ML engineers. Top-100 finishers on relevant competitions are worth direct outreach — they've demonstrated skill publicly.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Product Hunt / IndieHackers</h4><div class="meta">Online<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>Engineers who've launched AI products independently demonstrate initiative, product sense, and full-stack LLM skill. Product Hunt "AI" category launches are a sourcing feed.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Y Combinator AI batch alumni</h4><div class="meta">Biannual batches<span class="conf-tag ct-t" style="margin-left:8px">Family B</span></div>
+      <p>YC alumni from AI-focused startups that didn't scale or pivoted are high-conversion targets — strong skills, product experience, motivated to join a larger platform mission.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ FAMILY C ═══════ -->
+<div class="pnl" id="pc">
+  <span class="badge bc">C · Platform / Infrastructure</span>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#D85A30"></div>Tier 1 — core target, direct profile match</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#F0997B"></div>Tier 2 — strong adjacent, ML infra exposure</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div>Tier 3 — high-value adjacency (HPC / SRE)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#888780"></div>Tier 4 — internal &amp; non-traditional conversion</div>
+  </div>
+
+  <p class="sl">Companies by tier</p>
+  <div class="tier-block">
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 1<span>AI compute &amp; MLOps vendors</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t1b">Anyscale (Ray)</span><span class="chip chip-t1b">Modal</span><span class="chip chip-t1b">Replicate</span><span class="chip chip-t1b">BentoML</span><span class="chip chip-t1b">Weights &amp; Biases</span><span class="chip chip-t1b">Comet ML</span><span class="chip chip-t1b">Determined AI (HPE)</span><span class="chip chip-t1b">OctoAI</span><span class="chip chip-t1b">Baseten</span><span class="chip chip-t1b">Banana (serverless ML)</span><span class="chip chip-t1b">Dstack</span><span class="chip chip-t1b">Beam</span><span class="chip chip-t1b">Skypilot</span><span class="chip chip-t1b">LeptonAI</span><span class="chip chip-t1b">Fireworks AI</span><span class="chip chip-t1b">Together AI</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 1<span>Hyperscaler ML infra orgs</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t1b">Google TPU / TensorFlow infra</span><span class="chip chip-t1b">Meta AI Infra (PyTorch)</span><span class="chip chip-t1b">Microsoft Azure ML Platform</span><span class="chip chip-t1b">Amazon EC2 / SageMaker infra</span><span class="chip chip-t1b">Apple ML Platform</span><span class="chip chip-t1b">NVIDIA DGX / Triton team</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 2<span>Large-scale ML platform orgs</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t2b">Uber Michelangelo</span><span class="chip chip-t2b">Airbnb ML infra</span><span class="chip chip-t2b">Netflix ML platform</span><span class="chip chip-t2b">LinkedIn AI platform</span><span class="chip chip-t2b">Pinterest ML infra</span><span class="chip chip-t2b">Lyft data platform</span><span class="chip chip-t2b">DoorDash ML platform</span><span class="chip chip-t2b">Twitter / X infra</span><span class="chip chip-t2b">Snap AI infra</span><span class="chip chip-t2b">Spotify infra</span><span class="chip chip-t2b">Booking.com ML platform</span><span class="chip chip-t2b">Wayfair ML platform</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 2<span>Data &amp; infra tooling cos</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t2b">Databricks (Apache Spark / MLflow)</span><span class="chip chip-t2b">dbt Labs</span><span class="chip chip-t2b">Pinecone</span><span class="chip chip-t2b">Weaviate</span><span class="chip chip-t2b">Chroma</span><span class="chip chip-t2b">Qdrant</span><span class="chip chip-t2b">Milvus / Zilliz</span><span class="chip chip-t2b">Redis AI</span><span class="chip chip-t2b">Feast (feature store)</span><span class="chip chip-t2b">Tecton</span><span class="chip chip-t2b">Hopsworks</span><span class="chip chip-t2b">Prefect</span><span class="chip chip-t2b">Dagster</span><span class="chip chip-t2b">Astronomer (Airflow)</span>
+      </div></div>
+    </div>
+    <div class="tier-hd">
+      <div class="tier-lbl">Tier 3<span>HPC &amp; scientific compute</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t3">Argonne National Lab</span><span class="chip chip-t3">Oak Ridge National Lab</span><span class="chip chip-t3">Lawrence Berkeley NERSC</span><span class="chip chip-t3">Sandia National Labs</span><span class="chip chip-t3">Los Alamos National Lab</span><span class="chip chip-t3">CERN (compute team)</span><span class="chip chip-t3">NASA JPL compute</span><span class="chip chip-t3">NIH / NCI compute</span><span class="chip chip-t3">Academic HPC centres</span><span class="chip chip-t3">Renaissance Technologies</span><span class="chip chip-t3">Two Sigma (infra)</span><span class="chip chip-t3">Citadel (infra)</span>
+      </div></div>
+    </div>
+    <div class="tier-hd" style="border-bottom:none">
+      <div class="tier-lbl">Tier 4<span>SRE / systems adjacency</span></div>
+      <div class="tier-body"><div class="chips">
+        <span class="chip chip-t4b">Senior SREs supporting ML workloads</span><span class="chip chip-t4b">Data engineers building ML pipelines</span><span class="chip chip-t4b">Systems engineers with GPU / perf focus</span><span class="chip chip-t4b">Compiler / runtime engineers</span><span class="chip chip-t4b">Internal mobility (infra → ML infra)</span>
+      </div></div>
+    </div>
+  </div>
+
+  <p class="sl">Conferences &amp; communities — where infra engineers surface</p>
+  <div class="conf-grid">
+    <div class="conf-card">
+      <h4>MLSys</h4><div class="meta">Annual · Mar · Rotating US<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>The definitive ML systems conference. Papers on model serving, training efficiency, distributed systems for ML, hardware-software co-design. Every speaker and author is a pre-qualified Tier 1 target.</p>
+    </div>
+    <div class="conf-card">
+      <h4>NVIDIA GTC</h4><div class="meta">Annual · Mar · San Jose + virtual<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>10,000+ GPU and AI infra engineers. Deep learning infrastructure sessions, CUDA developer talks, and DGX deployment tracks. Sponsor sessions give access to attendee and speaker lists.</p>
+    </div>
+    <div class="conf-card">
+      <h4>KDD</h4><div class="meta">Annual · Aug · Rotating global<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>Data mining and ML at scale. Applied data science track surfaces senior ML platform engineers. Industry day speakers are practitioners, not academics — highest-value sourcing window at this event.</p>
+    </div>
+    <div class="conf-card">
+      <h4>SC (Supercomputing)</h4><div class="meta">Annual · Nov · Rotating US<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>The HPC community's main event. Surfaces GPU optimisation, distributed compute, and interconnect experts. Best pool for Tier 3 HPC-to-ML adjacency conversions. Technical program committee is a sourcing list.</p>
+    </div>
+    <div class="conf-card">
+      <h4>SREcon</h4><div class="meta">3x annual · Americas / EMEA / APAC<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>SRE and infrastructure reliability community. Speakers running ML workload reliability, GPU observability, and model serving SLAs are prime Tier 4 adjacency candidates for Family C roles.</p>
+    </div>
+    <div class="conf-card">
+      <h4>Ray Summit</h4><div class="meta">Annual · San Francisco<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>Distributed ML compute focused on Ray ecosystem. Speaker and contributor community maps directly onto ML infra engineering talent. GitHub contributor list for Ray itself is a parallel sourcing channel.</p>
+    </div>
+    <div class="conf-card">
+      <h4>vLLM / Triton community</h4><div class="meta">Online + summits<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>Active GitHub contributors to vLLM, Triton, CUTLASS, FlashAttention, and DeepSpeed are Tier 1 inference and kernel engineering targets. Contributor lists are fully public and searchable.</p>
+    </div>
+    <div class="conf-card">
+      <h4>PyData / Data Council</h4><div class="meta">Annual · Multiple locations<span class="conf-tag ct-c" style="margin-left:8px">Family C</span></div>
+      <p>Surfaces data engineers building ML pipelines — the primary Tier 4 adjacent pool for feature store, data infra, and ML data platform roles. Speaker tracks on Spark, Kafka, and Arrow are the target sessions.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p'+id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
