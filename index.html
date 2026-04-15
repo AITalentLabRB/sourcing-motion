@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Sourcing Framework — AITalentLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0e;
+    --bg2: #161614;
+    --bg3: #1e1e1b;
+    --bg4: #252522;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8e4d8;
+    --muted: #8a8778;
+    --subtle: #5a5850;
+    --accent-a: #b8a9f5;
+    --accent-b: #7ed4b0;
+    --accent-c: #f4a87c;
+    --accent-a-bg: rgba(184,169,245,0.1);
+    --accent-b-bg: rgba(126,212,176,0.1);
+    --accent-c-bg: rgba(244,168,124,0.1);
+    --chip-t1-bg: rgba(184,169,245,0.15);
+    --chip-t1-border: rgba(184,169,245,0.3);
+    --chip-t1-text: #c8baff;
+    --chip-t2-bg: rgba(126,212,176,0.12);
+    --chip-t2-border: rgba(126,212,176,0.28);
+    --chip-t2-text: #90ddb8;
+    --chip-t3-bg: rgba(244,168,124,0.12);
+    --chip-t3-border: rgba(244,168,124,0.28);
+    --chip-t3-text: #f5b88c;
+    --chip-t4-bg: rgba(255,255,255,0.05);
+    --chip-t4-border: rgba(255,255,255,0.12);
+    --chip-t4-text: #9a9788;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,15,14,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 56px;
+  }
+  .topnav-brand { font-family: var(--serif); font-size: 17px; color: var(--text); letter-spacing: 0.01em; }
+  .topnav-brand span { color: var(--accent-a); font-style: italic; }
+  .topnav-meta { font-size: 12px; color: var(--muted); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 40px 64px;
+    border-bottom: 1px solid var(--border);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--muted); }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 24px;
+    max-width: 680px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent-a); }
+  .hero-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.65; margin-bottom: 32px; }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero-pill {
+    font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px;
+    border: 1px solid var(--border2); color: var(--muted); background: var(--bg3);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .layout { display: grid; grid-template-columns: 220px 1fr; max-width: 1100px; margin: 0 auto; min-height: calc(100vh - 56px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+    position: sticky; top: 56px; height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar-section { margin-bottom: 8px; }
+  .sidebar-label {
+    font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--subtle); padding: 0 20px 8px;
+  }
+  .sidebar-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 8px 20px; font-size: 13px; color: var(--muted);
+    background: transparent; border: none; cursor: pointer;
+    transition: all .15s; border-left: 2px solid transparent;
+    font-family: var(--sans);
+  }
+  .sidebar-btn:hover { color: var(--text); background: var(--bg3); }
+  .sidebar-btn.on { color: var(--text); border-left-color: var(--accent-a); background: var(--bg3); }
+  .sidebar-btn.family-b.on { border-left-color: var(--accent-b); }
+  .sidebar-btn.family-c.on { border-left-color: var(--accent-c); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 12px 20px; }
+
+  /* ── CONTENT ── */
+  .content { padding: 40px 48px 80px; overflow: hidden; }
+
+  /* ── VIEW PANELS ── */
+  .view { display: none; }
+  .view.on { display: block; }
+
+  /* ── SECTION LABEL ── */
+  .sl {
+    font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--subtle); margin: 32px 0 12px;
+  }
+  .sl:first-child { margin-top: 0; }
+
+  /* ── FAMILY BADGE ── */
+  .fbadge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .fbadge-a { background: var(--accent-a-bg); border: 1px solid rgba(184,169,245,0.25); color: var(--accent-a); }
+  .fbadge-b { background: var(--accent-b-bg); border: 1px solid rgba(126,212,176,0.25); color: var(--accent-b); }
+  .fbadge-c { background: var(--accent-c-bg); border: 1px solid rgba(244,168,124,0.25); color: var(--accent-c); }
+
+  /* ── SECTION NAV PILLS ── */
+  .snav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+  .spill {
+    font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px;
+    border: 1px solid var(--border2); color: var(--muted);
+    background: transparent; cursor: pointer; transition: all .15s; font-family: var(--sans);
+  }
+  .spill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .spill.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .sec { display: none; } .sec.on { display: block; }
+
+  /* ── TIER TABLE ── */
+  .tier-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .tier-row { display: grid; grid-template-columns: 170px 1fr; border-bottom: 1px solid var(--border); }
+  .tier-row:last-child { border-bottom: none; }
+  .tier-lbl { padding: 14px 16px; background: var(--bg3); border-right: 1px solid var(--border); }
+  .tier-lbl strong { display: block; font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .tier-lbl span { font-size: 11px; color: var(--subtle); line-height: 1.4; }
+  .tier-chips { padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 5px; align-content: flex-start; }
+
+  /* ── CHIPS ── */
+  .chip { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; border: 1px solid; line-height: 1.4; white-space: nowrap; }
+  .t1 { background: var(--chip-t1-bg); border-color: var(--chip-t1-border); color: var(--chip-t1-text); }
+  .t2 { background: var(--chip-t2-bg); border-color: var(--chip-t2-border); color: var(--chip-t2-text); }
+  .t3 { background: var(--chip-t3-bg); border-color: var(--chip-t3-border); color: var(--chip-t3-text); }
+  .t4 { background: var(--chip-t4-bg); border-color: var(--chip-t4-border); color: var(--chip-t4-text); }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .ldot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── CONFERENCE GRID ── */
+  .conf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .conf-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--bg2); transition: border-color .2s; }
+  .conf-card:hover { border-color: var(--border2); }
+  .conf-card h4 { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .conf-card .cmeta { font-size: 11px; color: var(--subtle); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .conf-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .ftag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 6px; }
+  .fta { background: var(--accent-a-bg); color: var(--accent-a); }
+  .ftb { background: var(--accent-b-bg); color: var(--accent-b); }
+  .ftc { background: var(--accent-c-bg); color: var(--accent-c); }
+
+  /* ── CHANNEL TABLE ── */
+  .ch-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .ch-row { display: grid; grid-template-columns: 160px 1fr 90px; border-bottom: 1px solid var(--border); align-items: start; }
+  .ch-row:last-child { border-bottom: none; }
+  .ch-name { padding: 11px 14px; font-size: 12px; font-weight: 500; color: var(--text); border-right: 1px solid var(--border); background: var(--bg3); }
+  .ch-detail { padding: 11px 14px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .ch-eff { padding: 11px 12px; font-size: 11px; font-weight: 500; text-align: center; border-left: 1px solid var(--border); }
+  .hi { color: var(--accent-b); } .mid { color: var(--accent-c); } .lo { color: var(--muted); }
+
+  /* ── CONVERSION TABLE ── */
+  .cv-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .cv-hdr { display: grid; grid-template-columns: 170px 90px 1fr 1fr; background: var(--bg3); border-bottom: 1px solid var(--border); }
+  .cv-row { display: grid; grid-template-columns: 170px 90px 1fr 1fr; border-bottom: 1px solid var(--border); }
+  .cv-row:last-child { border-bottom: none; }
+  .cv-cell { padding: 10px 12px; font-size: 12px; color: var(--muted); border-right: 1px solid var(--border); line-height: 1.45; }
+  .cv-cell:last-child { border-right: none; }
+  .cv-cell.h { font-size: 10px; font-weight: 500; color: var(--subtle); text-transform: uppercase; letter-spacing: .07em; }
+  .cv-cell.lbl { font-weight: 500; color: var(--text); background: var(--bg3); }
+  .cv-cell.rate { font-weight: 500; color: var(--text); }
+  .bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 6px; }
+  .bf { height: 100%; border-radius: 2px; }
+
+  /* ── PLAYBOOK CARDS ── */
+  .pb2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .pbcard { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--bg2); }
+  .pbcard h4 { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+  .pbcard ul { list-style: none; padding: 0; }
+  .pbcard ul li { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); line-height: 1.4; }
+  .pbcard ul li:last-child { border-bottom: none; }
+
+  /* ── MSG BOX ── */
+  .msg { border-left: 2px solid var(--accent-a); background: rgba(184,169,245,0.05); padding: 14px 16px; font-size: 13px; color: var(--muted); line-height: 1.7; font-style: italic; margin-bottom: 20px; border-radius: 0 8px 8px 0; }
+  .msg-b { border-left-color: var(--accent-b); background: rgba(126,212,176,0.05); }
+  .msg-c { border-left-color: var(--accent-c); background: rgba(244,168,124,0.05); }
+
+  /* ── OUTREACH BOX ── */
+  .ot { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 24px; }
+  .ot .subj { font-size: 11px; font-weight: 500; color: var(--subtle); margin-bottom: 10px; letter-spacing: .03em; }
+  .ot .body { font-size: 13px; color: var(--muted); line-height: 1.8; white-space: pre-line; }
+  .ph { color: var(--subtle); font-style: italic; }
+
+  /* ── BLOCKER GRID ── */
+  .bl-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .bl-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: var(--bg2); }
+  .bl-card .blbl { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+  .bl-card.warn .blbl { color: var(--accent-c); }
+  .bl-card.fix .blbl { color: var(--accent-b); }
+  .bl-card ul { list-style: none; padding: 0; }
+  .bl-card ul li { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); line-height: 1.4; }
+  .bl-card ul li:last-child { border-bottom: none; }
+
+  /* ── CALIB TABLE ── */
+  .calib { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .calib-row { display: grid; grid-template-columns: 1fr 1.8fr; border-bottom: 1px solid var(--border); }
+  .calib-row:last-child { border-bottom: none; }
+  .cq { padding: 12px 14px; font-size: 12px; font-weight: 500; color: var(--text); background: var(--bg3); border-right: 1px solid var(--border); }
+  .ca { padding: 12px 14px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── SUCCESS STORY ── */
+  .story { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+  .story-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .scell { padding: 16px; border-right: 1px solid var(--border); }
+  .scell:last-child { border-right: none; }
+  .slbl { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--subtle); margin-bottom: 8px; }
+  .scell p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* ── METRICS ── */
+  .mrow { display: flex; gap: 8px; margin-bottom: 24px; }
+  .mcard { flex: 1; background: var(--bg3); border-radius: 10px; padding: 14px; border: 1px solid var(--border); text-align: center; }
+  .mcard .mv { font-family: var(--serif); font-size: 26px; color: var(--text); }
+  .mcard .ml { font-size: 11px; color: var(--subtle); margin-top: 4px; }
+
+  /* ── TIME GRID ── */
+  .g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .tcard { border: 1px solid var(--border); border-radius: 10px; padding: 14px; background: var(--bg2); }
+  .tcard h4 { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+  .trow { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .trow:last-child { border-bottom: none; }
+  .tlbl { color: var(--muted); }
+  .tval { font-weight: 500; color: var(--text); }
+  .wpill { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 5px; background: var(--chip-t3-bg); color: var(--chip-t3-text); margin-left: 4px; border: 1px solid var(--chip-t3-border); }
+
+  /* ── UNIV GRID ── */
+  .ug { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 24px; }
+  .ucard { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--bg2); }
+  .ucard h4 { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .ucard p { font-size: 11px; color: var(--subtle); line-height: 1.4; }
+
+  /* ── OVERVIEW CARDS ── */
+  .ov-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .ov-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; background: var(--bg2); }
+  .ov-card-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--subtle); margin-bottom: 10px; }
+  .ov-card h3 { font-family: var(--serif); font-size: 18px; font-weight: 400; margin-bottom: 14px; }
+  .ov-card h3.ca { color: var(--accent-a); }
+  .ov-card h3.cb { color: var(--accent-b); }
+  .ov-card h3.cc { color: var(--accent-c); }
+  .ov-card ul { list-style: none; padding: 0; }
+  .ov-card ul li { font-size: 12px; color: var(--muted); padding: 3px 0; border-bottom: 1px solid var(--border); }
+  .ov-card ul li:last-child { border-bottom: none; }
+
+  /* ── STEP CARDS ── */
+  .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--border); transition: border-color .2s; }
+  .step:hover { border-color: var(--border2); }
+  .step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--bg4); border: 1px solid var(--border2); font-size: 12px; font-weight: 500; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+  .step-body h4 { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .step-body p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── FUNNEL ── */
+  .funnel-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .fmet { flex: 1; min-width: 100px; border-radius: 10px; padding: 14px; border: 1px solid var(--border); background: var(--bg2); }
+  .fmet .v { font-family: var(--serif); font-size: 24px; color: var(--text); }
+  .fmet .l { font-size: 11px; color: var(--subtle); margin-top: 3px; }
+  .fmet .fbar { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 8px; }
+  .fmet .fbf { height: 100%; border-radius: 2px; }
+  .track-section { margin-top: 20px; }
+  .track-section h4 { font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .08em; }
+  .track-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .track-label { font-size: 12px; color: var(--muted); width: 150px; flex-shrink: 0; }
+  .track-bg { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .track-fill { height: 100%; border-radius: 2px; background: var(--accent-a); opacity: 0.6; }
+  .track-pct { font-size: 12px; color: var(--subtle); width: 36px; text-align: right; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .footer-brand { font-family: var(--serif); font-size: 14px; color: var(--muted); }
+  .footer-brand span { font-style: italic; color: var(--accent-a); }
+  .footer-meta { font-size: 11px; color: var(--subtle); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand">Talent AI <span>Lab</span></div>
+  <div class="topnav-meta">AI Sourcing Framework · 3 families · Full playbook</div>
+</nav>
+
+<div style="max-width:1100px;margin:0 auto">
+  <div class="hero">
+    <div class="hero-eyebrow">Rosy Bhullar · AITalentLab</div>
+    <h1>Your AI talent <em>sourcing</em> framework</h1>
+    <p class="hero-sub">Three talent families. Seven sourcing steps. Full playbooks with companies, channels, conferences, outreach templates, and conversion benchmarks.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">3 talent families</span>
+      <span class="hero-pill">7-step strategy</span>
+      <span class="hero-pill">Company directories</span>
+      <span class="hero-pill">Conference guides</span>
+      <span class="hero-pill">Outreach templates</span>
+      <span class="hero-pill">Conversion benchmarks</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Framework</div>
+      <button class="sidebar-btn on" onclick="showView('overview',this)">Overview</button>
+      <button class="sidebar-btn" onclick="showView('strategy',this)">7-step strategy</button>
+      <button class="sidebar-btn" onclick="showView('funnel',this)">Funnel tracking</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Family A</div>
+      <button class="sidebar-btn" onclick="showView('a-companies',this)">Companies</button>
+      <button class="sidebar-btn" onclick="showView('a-conferences',this)">Conferences</button>
+      <button class="sidebar-btn" onclick="showView('a-channels',this)">Channels</button>
+      <button class="sidebar-btn" onclick="showView('a-playbook',this)">Playbook</button>
+      <button class="sidebar-btn" onclick="showView('a-conversion',this)">Conversion</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Family B</div>
+      <button class="sidebar-btn family-b" onclick="showView('b-companies',this)">Companies</button>
+      <button class="sidebar-btn family-b" onclick="showView('b-conferences',this)">Conferences</button>
+      <button class="sidebar-btn family-b" onclick="showView('b-channels',this)">Channels</button>
+      <button class="sidebar-btn family-b" onclick="showView('b-playbook',this)">Playbook</button>
+      <button class="sidebar-btn family-b" onclick="showView('b-conversion',this)">Conversion</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Family C</div>
+      <button class="sidebar-btn family-c" onclick="showView('c-companies',this)">Companies</button>
+      <button class="sidebar-btn family-c" onclick="showView('c-conferences',this)">Conferences</button>
+      <button class="sidebar-btn family-c" onclick="showView('c-channels',this)">Channels</button>
+      <button class="sidebar-btn family-c" onclick="showView('c-playbook',this)">Playbook</button>
+      <button class="sidebar-btn family-c" onclick="showView('c-conversion',this)">Conversion</button>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="view on" id="view-overview">
+      <p class="sl">3 talent families — each needs a distinct sourcing motion</p>
+      <div class="ov-grid">
+        <div class="ov-card">
+          <div class="ov-card-label">Family A</div>
+          <h3 class="ca">Research / Frontier AI</h3>
+          <ul><li>Applied Scientist</li><li>Research Scientist</li><li>LLM Researcher</li><li>RL Researcher</li></ul>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-label">Family B</div>
+          <h3 class="cb">Engineering / Productization</h3>
+          <ul><li>AI / GenAI Engineer</li><li>ML Engineer</li><li>Applied AI Engineer</li><li>MLOps / LLMOps Engineer</li></ul>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-label">Family C</div>
+          <h3 class="cc">Platform / Infrastructure</h3>
+          <ul><li>Distributed Systems Engineer (AI)</li><li>GPU / Performance Engineer</li><li>Data Engineer for ML Platforms</li><li>Model Serving / Inference Engineer</li></ul>
+        </div>
+      </div>
+      <p class="sl">What changes by family</p>
+      <div class="g3">
+        <div class="tcard"><h4>Markets</h4>
+          <div class="trow"><span class="tlbl">A →</span><span class="tval" style="font-size:11px;text-align:right">Frontier labs, university labs</span></div>
+          <div class="trow"><span class="tlbl">B →</span><span class="tval" style="font-size:11px;text-align:right">AI startups, cloud platforms</span></div>
+          <div class="trow"><span class="tlbl">C →</span><span class="tval" style="font-size:11px;text-align:right">Hyperscaler infra, MLOps vendors</span></div>
+        </div>
+        <div class="tcard"><h4>Primary channels</h4>
+          <div class="trow"><span class="tlbl">A →</span><span class="tval" style="font-size:11px;text-align:right">ArXiv, conferences, co-authors</span></div>
+          <div class="trow"><span class="tlbl">B →</span><span class="tval" style="font-size:11px;text-align:right">GitHub, Hugging Face, HN</span></div>
+          <div class="trow"><span class="tlbl">C →</span><span class="tval" style="font-size:11px;text-align:right">CUDA repos, MLSys, SRE comms</span></div>
+        </div>
+        <div class="tcard"><h4>Conversion speed</h4>
+          <div class="trow"><span class="tlbl">A →</span><span class="tval" style="font-size:11px">Slow / high-touch · 15–35%</span></div>
+          <div class="trow"><span class="tlbl">B →</span><span class="tval" style="font-size:11px">Moderate · 25–45%</span></div>
+          <div class="trow"><span class="tlbl">C →</span><span class="tval" style="font-size:11px">Specialist · 20–35%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STRATEGY ══ -->
+    <div class="view" id="view-strategy">
+      <p class="sl">7-step framework — applied per role family</p>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Intake the role like a market problem</h4><p>Capture: business problem solved, true must-haves vs nice-to-haves, AI stack, research vs product vs platform orientation, comp reality, location flexibility, expected funnel size.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Build the talent map</h4><p>Target companies, adjacent companies, academia/labs, open-source communities, internal pools, past applicants, silver medalists, conference ecosystems. Sourcing is market architecture, not just LinkedIn search.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Define channel strategy by role family</h4><p>Direct sourcing, internal channels, community channels, event-based channels. Each family has a different channel mix — don't apply a single approach across all three.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Create role-specific sourcing plays</h4><p>1-page playbook per family: what to look for, target companies, adjacent profiles, where to find them, messaging angle.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Craft messaging by role family</h4><p>Researchers want craft and mission cited. Engineers want ownership and scale. Infra candidates want hard systems problems. One generic message serves none of them.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Track the funnel by channel and role family</h4><p>Response rate, HM pass rate, interview conversion, source of hire. Move from "we sourced a lot" to "this channel produced quality for this family."</p></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body"><h4>Document success stories</h4><p>Before → action → outcome format. Quantify everything: response rate lift, days to slate, quality of hire. Build reusable playbooks from each win.</p></div></div>
+      </div>
+    </div>
+
+    <!-- ══ FUNNEL ══ -->
+    <div class="view" id="view-funnel">
+      <p class="sl">Funnel metrics — track by role family and channel</p>
+      <div class="funnel-row">
+        <div class="fmet"><div class="v">~150</div><div class="l">Talent map size</div><div class="fbar"><div class="fbf" style="width:100%;background:var(--accent-b)"></div></div></div>
+        <div class="fmet"><div class="v">~60</div><div class="l">Outreach sent</div><div class="fbar"><div class="fbf" style="width:40%;background:var(--accent-b)"></div></div></div>
+        <div class="fmet"><div class="v">~30%</div><div class="l">Response rate</div><div class="fbar"><div class="fbf" style="width:30%;background:var(--accent-c)"></div></div></div>
+        <div class="fmet"><div class="v">~60%</div><div class="l">Recruiter screen pass</div><div class="fbar"><div class="fbf" style="width:60%;background:var(--accent-c)"></div></div></div>
+        <div class="fmet"><div class="v">~40%</div><div class="l">HM review pass</div><div class="fbar"><div class="fbf" style="width:40%;background:var(--accent-a)"></div></div></div>
+      </div>
+      <div class="track-section">
+        <h4>Source of hire by channel</h4>
+        <div class="track-row"><span class="track-label">GitHub / publications</span><div class="track-bg"><div class="track-fill" style="width:72%"></div></div><span class="track-pct">72%</span></div>
+        <div class="track-row"><span class="track-label">Employee referrals</span><div class="track-bg"><div class="track-fill" style="width:58%"></div></div><span class="track-pct">58%</span></div>
+        <div class="track-row"><span class="track-label">Conferences / events</span><div class="track-bg"><div class="track-fill" style="width:50%"></div></div><span class="track-pct">50%</span></div>
+        <div class="track-row"><span class="track-label">LinkedIn direct</span><div class="track-bg"><div class="track-fill" style="width:34%"></div></div><span class="track-pct">34%</span></div>
+        <div class="track-row"><span class="track-label">Prior pipeline</span><div class="track-bg"><div class="track-fill" style="width:28%"></div></div><span class="track-pct">28%</span></div>
+        <div class="track-row"><span class="track-label">Internal mobility</span><div class="track-bg"><div class="track-fill" style="width:22%"></div></div><span class="track-pct">22%</span></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY A COMPANIES ══ -->
+    <div class="view" id="view-a-companies">
+      <span class="fbadge fbadge-a">🔬 A · Research / Frontier AI</span>
+      <div class="legend">
+        <div class="leg"><div class="ldot" style="background:var(--accent-a)"></div>Tier 1 — hardest to convert, highest signal</div>
+        <div class="leg"><div class="ldot" style="background:var(--accent-b)"></div>Tier 2 — strong profile, more convertible</div>
+        <div class="leg"><div class="ldot" style="background:var(--accent-c)"></div>Tier 3 — adjacent / rising labs</div>
+        <div class="leg"><div class="ldot" style="background:var(--subtle)"></div>Tier 4 — academic &amp; non-traditional</div>
+      </div>
+      <div class="tier-wrap">
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 1</strong><span>Frontier labs</span></div><div class="tier-chips"><span class="chip t1">OpenAI</span><span class="chip t1">Anthropic</span><span class="chip t1">Google DeepMind</span><span class="chip t1">Meta FAIR</span><span class="chip t1">Microsoft Research</span><span class="chip t1">Apple ML Research</span><span class="chip t1">Amazon Science</span><span class="chip t1">xAI</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 2</strong><span>Hyperscaler research</span></div><div class="tier-chips"><span class="chip t2">Google Brain (merged DeepMind)</span><span class="chip t2">AWS AI Labs</span><span class="chip t2">NVIDIA Research</span><span class="chip t2">IBM Research</span><span class="chip t2">Samsung AI</span><span class="chip t2">Baidu Research</span><span class="chip t2">Tencent AI Lab</span><span class="chip t2">ByteDance AI Lab</span><span class="chip t2">Adobe Research</span><span class="chip t2">Salesforce Research</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 3</strong><span>AI research startups</span></div><div class="tier-chips"><span class="chip t3">Mistral AI</span><span class="chip t3">Cohere</span><span class="chip t3">Inflection AI</span><span class="chip t3">Adept AI</span><span class="chip t3">Character.AI</span><span class="chip t3">Runway ML</span><span class="chip t3">Stability AI</span><span class="chip t3">Aleph Alpha</span><span class="chip t3">AI21 Labs</span><span class="chip t3">Hugging Face</span><span class="chip t3">Together AI</span><span class="chip t3">Nous Research</span><span class="chip t3">EleutherAI</span><span class="chip t3">Allen Institute for AI (AI2)</span><span class="chip t3">Sakana AI</span><span class="chip t3">Imbue</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 3</strong><span>NLP / vision focused</span></div><div class="tier-chips"><span class="chip t3">Grammarly AI</span><span class="chip t3">Duolingo AI</span><span class="chip t3">Reka AI</span><span class="chip t3">Contextual AI</span><span class="chip t3">Perceive</span><span class="chip t3">Twelve Labs</span><span class="chip t3">ElevenLabs</span><span class="chip t3">AssemblyAI</span><span class="chip t3">Deepgram</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 4</strong><span>Academic labs &amp; institutes</span></div><div class="tier-chips"><span class="chip t4">MIT CSAIL</span><span class="chip t4">Stanford HAI</span><span class="chip t4">CMU ML Dept</span><span class="chip t4">Berkeley BAIR</span><span class="chip t4">Toronto Vector Institute</span><span class="chip t4">Oxford Future of Humanity</span><span class="chip t4">Cambridge ML Group</span><span class="chip t4">ETH Zürich AI Center</span><span class="chip t4">Mila (Montreal)</span><span class="chip t4">NYU CILVR</span><span class="chip t4">Caltech CMS</span><span class="chip t4">UW Allen School</span><span class="chip t4">EPFL AI lab</span><span class="chip t4">Alan Turing Institute (UK)</span></div></div>
+      </div>
+      <p class="sl">University labs — by research strength</p>
+      <div class="ug">
+        <div class="ucard"><h4>MIT CSAIL / MIT-IBM</h4><p>Deep learning, NLP, robotics, vision. Strong PhD placement into industry.</p></div>
+        <div class="ucard"><h4>Stanford HAI / SAIL</h4><p>Foundation models, human-AI interaction, RL. Strong industry connections via faculty.</p></div>
+        <div class="ucard"><h4>CMU ML Dept / LTI</h4><p>NLP, speech, vision, ML systems. Largest dedicated ML dept in the US.</p></div>
+        <div class="ucard"><h4>Berkeley BAIR / CHAI</h4><p>RL, robotics, alignment. Home of PPO and RLHF foundations.</p></div>
+        <div class="ucard"><h4>Toronto / Vector Institute</h4><p>Deep learning birthplace (Hinton). Dedicated AI research hub.</p></div>
+        <div class="ucard"><h4>Mila — Quebec AI Institute</h4><p>Yoshua Bengio's lab. Generative models, GNNs, RL.</p></div>
+        <div class="ucard"><h4>ETH Zürich AI Center</h4><p>Computer vision, 3D AI, robotics. Top European pipeline.</p></div>
+        <div class="ucard"><h4>Oxford / Cambridge</h4><p>NLP, Bayesian methods, AI safety. Alignment-adjacent talent.</p></div>
+        <div class="ucard"><h4>NYU CDS / CILVR</h4><p>Yann LeCun's group. Self-supervised learning, vision, energy-based models.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY A CONFERENCES ══ -->
+    <div class="view" id="view-a-conferences">
+      <span class="fbadge fbadge-a">🔬 A · Research / Frontier AI</span>
+      <p class="sl">Conferences — where researchers surface</p>
+      <div class="conf-grid">
+        <div class="conf-card"><h4>NeurIPS</h4><div class="cmeta">Annual · Dec · Vancouver / virtual <span class="ftag fta">Family A</span></div><p>Largest ML conference. Target poster presenters, workshop speakers, and oral paper authors. Best sourcing window: Oct–Nov pre-conference CFP period.</p></div>
+        <div class="conf-card"><h4>ICML</h4><div class="cmeta">Annual · Jul · Rotating global <span class="ftag fta">Family A</span></div><p>Core ML theory and methods. Target authors in LLM, RL, and optimisation tracks. Workshop co-organisers are senior researchers open to new relationships.</p></div>
+        <div class="conf-card"><h4>ICLR</h4><div class="cmeta">Annual · May · Rotating global <span class="ftag fta">Family A</span></div><p>Highly selective — acceptance = strong signal. Outstanding paper and spotlight authors are top-1% targets.</p></div>
+        <div class="conf-card"><h4>CVPR</h4><div class="cmeta">Annual · Jun · Rotating US <span class="ftag fta">Family A</span></div><p>Top computer vision venue. Critical for vision-language, video generation, and multimodal AI researchers. Focus on oral and best paper tracks.</p></div>
+        <div class="conf-card"><h4>ACL / EMNLP / NAACL</h4><div class="cmeta">Annual · Rotating <span class="ftag fta">Family A</span></div><p>NLP-specific. Essential for LLM and alignment researchers. EMNLP attracts more applied/industry-adjacent talent than ACL.</p></div>
+        <div class="conf-card"><h4>AAAI</h4><div class="cmeta">Annual · Feb · Rotating US <span class="ftag fta">Family A</span></div><p>Broad AI — planning, reasoning, knowledge representation. Useful for agents and neuro-symbolic researchers.</p></div>
+        <div class="conf-card"><h4>ECCV / ICCV</h4><div class="cmeta">Biennial · Rotating Europe / global <span class="ftag fta">Family A</span></div><p>European / International computer vision. Strong for 3D, generative vision, and scene understanding. Alternates with CVPR in even years.</p></div>
+        <div class="conf-card"><h4>CoRL / RSS</h4><div class="cmeta">Annual <span class="ftag fta">Family A</span></div><p>Robotics + ML. Small, tight-knit community — relationships matter more than cold outreach here.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY A CHANNELS ══ -->
+    <div class="view" id="view-a-channels">
+      <span class="fbadge fbadge-a">🔬 A · Research / Frontier AI</span>
+      <p class="sl">Channels — ranked by yield</p>
+      <div class="ch-wrap">
+        <div class="ch-row"><div class="ch-name">ArXiv / Semantic Scholar</div><div class="ch-detail">Map author pages, follow co-author chains 2–3 degrees out. Cite the specific paper in outreach.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">Conference ecosystems</div><div class="ch-detail">NeurIPS · ICML · ICLR · CVPR · ACL. Target poster presenters, workshop organisers, invited speakers.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">PhD advisor networks</div><div class="ch-detail">Build 10–15 professor relationships. Ask who in their lab is considering industry in the next 6–12 months.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Google Scholar profiles</div><div class="ch-detail">Search by keyword + institution. Shows research depth before first contact — richer than LinkedIn alone.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Employee referrals</div><div class="ch-detail">Research teams are tight networks. A current researcher referral is the highest-conversion source. Ask quarterly.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Research Twitter / X</div><div class="ch-detail">Warm engagement before cold outreach significantly increases response rates.</div><div class="ch-eff mid">Medium</div></div>
+        <div class="ch-row"><div class="ch-name">LinkedIn Recruiter</div><div class="ch-detail">Lower yield for senior researchers. Use as contact layer after identifying candidates through publication channels.</div><div class="ch-eff lo">Lower</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY A PLAYBOOK ══ -->
+    <div class="view" id="view-a-playbook">
+      <span class="fbadge fbadge-a">🔬 A · Research / Frontier AI</span>
+      <div class="pb2">
+        <div class="pbcard"><h4>What to look for</h4><ul><li>Published research — venues matter</li><li>LLM / RL / multimodal focus</li><li>First or second-author papers</li><li>Model training at scale</li><li>Novel architecture contributions</li><li>Collaboration with product teams</li></ul></div>
+        <div class="pbcard"><h4>Adjacent profiles</h4><ul><li>PhD candidates — final year</li><li>Postdocs ready to transition</li><li>Research engineers with publications</li><li>Strong MS grads from top programs</li><li>Quant researchers moving into AI</li></ul></div>
+      </div>
+      <p class="sl">Messaging angle</p>
+      <div class="msg">Lead with research craft and mission — not comp. Emphasise compute access, publication freedom, direct collaboration with product teams, and the specific unsolved problem. Name their paper. Do not send generic messages — researchers share bad outreach with each other.</div>
+      <p class="sl">Outreach template</p>
+      <div class="ot">
+        <div class="subj">Subject: Your work on <span class="ph">[specific paper / topic]</span></div>
+        <div class="body">Hi <span class="ph">[name]</span>,
+
+I came across your paper on <span class="ph">[specific topic]</span> — the approach you took to <span class="ph">[specific finding or method]</span> is directly relevant to problems we're working on here.
+
+We're building out our research team focused on <span class="ph">[research area]</span>. The role involves access to <span class="ph">[compute / dataset scale]</span>, publication freedom, and close collaboration with the product engineering team.
+
+Worth a 20-minute conversation to see if there's overlap?</div>
+      </div>
+      <p class="sl">Interview blockers &amp; calibration fixes</p>
+      <div class="bl-grid">
+        <div class="bl-card warn"><div class="blbl">Common blockers</div><ul><li>HM insists on top-3 lab pedigree only</li><li>No publication bar defined — every profile debated</li><li>Comp too far below industry for senior researchers</li><li>Full paper presentation required — loop too slow</li><li>No research problem shared before screen</li></ul></div>
+        <div class="bl-card fix"><div class="blbl">Calibration fixes</div><ul><li>Define min venue bar upfront (top-tier conf or workshop)</li><li>Share a 1-page research problem brief before the screen</li><li>Separate researcher from research engineer track</li><li>Run a paper deep-dive as the core loop, not a whiteboard</li><li>Weekly HM calibration — review 3 profiles per session</li></ul></div>
+      </div>
+      <p class="sl">HM calibration questions</p>
+      <div class="calib">
+        <div class="calib-row"><div class="cq">What does "good research" look like here?</div><div class="ca">Clarify: published output vs applied innovation vs productisation speed. Forces HM to choose rather than say "all three."</div></div>
+        <div class="calib-row"><div class="cq">What's the minimum publication venue bar?</div><div class="ca">Get a concrete answer — top-8 conf, workshop, pre-print, or none. Prevents arbitrary rejections later.</div></div>
+        <div class="calib-row"><div class="cq">What's the collaboration model with engineering?</div><div class="ca">Researchers who've only published often underestimate product pressure. Surface this early.</div></div>
+        <div class="calib-row"><div class="cq">Who is the closest current team member to the ideal hire?</div><div class="ca">Gives you a real talent anchor to map adjacent profiles against.</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY A CONVERSION ══ -->
+    <div class="view" id="view-a-conversion">
+      <span class="fbadge fbadge-a">🔬 A · Research / Frontier AI</span>
+      <p class="sl">Stage-by-stage conversion expectations</p>
+      <div class="cv-wrap">
+        <div class="cv-hdr"><div class="cv-cell h lbl">Stage</div><div class="cv-cell h">Rate</div><div class="cv-cell h">Key driver</div><div class="cv-cell h">Watch out for</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Outreach → response</div><div class="cv-cell rate">15–35%<div class="bar"><div class="bf" style="width:25%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Personalisation to specific work. Generic: &lt;8%</div><div class="cv-cell">Mass outreach — researchers talk to each other</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Response → screen</div><div class="cv-cell rate">60–75%<div class="bar"><div class="bf" style="width:68%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Send 1-page research brief before the call</div><div class="cv-cell">Vague "tell me about yourself" screens</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Screen → HM review</div><div class="cv-cell rate">40–55%<div class="bar"><div class="bf" style="width:47%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Clear profile bar defined upfront</div><div class="cv-cell">HM pedigree bias kills 70% of a viable pool</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">HM review → interview</div><div class="cv-cell rate">50–65%<div class="bar"><div class="bf" style="width:57%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Paper deep-dive format</div><div class="cv-cell">Slow scheduling — competing offers advance daily</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Interview → offer</div><div class="cv-cell rate">25–40%<div class="bar"><div class="bf" style="width:32%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Consistent scorecard, loop aligned before interviews</div><div class="cv-cell">One "no" vote tanks slate without discussion</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Offer → accept</div><div class="cv-cell rate">55–70%<div class="bar"><div class="bf" style="width:62%;background:var(--accent-a)"></div></div></div><div class="cv-cell">Mission + compute access + publication freedom</div><div class="cv-cell">Counter-offers from frontier labs</div></div>
+      </div>
+      <div class="g3">
+        <div class="tcard"><h4>Time benchmarks</h4><div class="trow"><span class="tlbl">Outreach to slate</span><span class="tval">4–8 wks</span></div><div class="trow"><span class="tlbl">Slate to offer</span><span class="tval">3–5 wks</span></div><div class="trow"><span class="tlbl">Offer to start</span><span class="tval">4–12 wks<span class="wpill">notice</span></span></div><div class="trow"><span class="tlbl">Total time to fill</span><span class="tval">10–20 wks</span></div></div>
+        <div class="tcard"><h4>Volume benchmarks</h4><div class="trow"><span class="tlbl">Talent map size</span><span class="tval">80–200</span></div><div class="trow"><span class="tlbl">Outreach to send</span><span class="tval">30–60</span></div><div class="trow"><span class="tlbl">Screens to slate</span><span class="tval">8–14</span></div><div class="trow"><span class="tlbl">Interviews to offer</span><span class="tval">4–8</span></div></div>
+        <div class="tcard"><h4>Market signals</h4><div class="trow"><span class="tlbl">NeurIPS / ICML season</span><span class="tval">Oct–Jan surge</span></div><div class="trow"><span class="tlbl">PhD graduation cycle</span><span class="tval">May–Aug peak</span></div><div class="trow"><span class="tlbl">Lab funding news</span><span class="tval">Monitor weekly</span></div><div class="trow"><span class="tlbl">Counter-offer risk</span><span class="tval">Very high</span></div></div>
+      </div>
+      <p class="sl">Success story</p>
+      <div class="story"><div class="story-row">
+        <div class="scell"><div class="slbl">Challenge</div><p>Senior Research Scientist role stalled — team only targeting 3 frontier lab alumni. Pipeline dry after 6 weeks.</p></div>
+        <div class="scell"><div class="slbl">Strategy &amp; execution</div><p>Mapped co-author networks from recent NeurIPS papers. Added PhD-to-industry candidates from 4 top programs. Rewrote outreach to cite specific papers and open problems.</p></div>
+        <div class="scell"><div class="slbl">Outcome</div><p>Response rate 12% → 34%. Slate in 18 days. Hired from postdoc pool — invisible to direct LinkedIn search.</p></div>
+      </div></div>
+      <div class="mrow">
+        <div class="mcard"><div class="mv">34%</div><div class="ml">Response rate (up from 12%)</div></div>
+        <div class="mcard"><div class="mv">18d</div><div class="ml">Days to slate</div></div>
+        <div class="mcard"><div class="mv">~80%</div><div class="ml">Pipeline from non-LinkedIn</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY B COMPANIES ══ -->
+    <div class="view" id="view-b-companies">
+      <span class="fbadge fbadge-b">⚙️ B · Engineering / Productization</span>
+      <div class="legend">
+        <div class="leg"><div class="ldot" style="background:var(--accent-b)"></div>Tier 1 — core target, highest profile match</div>
+        <div class="leg"><div class="ldot" style="background:#5DCAA5"></div>Tier 2 — strong adjacent, high convertibility</div>
+        <div class="leg"><div class="ldot" style="background:var(--accent-c)"></div>Tier 3 — adjacent pools with LLM exposure</div>
+        <div class="leg"><div class="ldot" style="background:var(--subtle)"></div>Tier 4 — internal &amp; non-traditional</div>
+      </div>
+      <div class="tier-wrap">
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 1</strong><span>AI-native product cos</span></div><div class="tier-chips"><span class="chip t2">Cursor</span><span class="chip t2">Replit</span><span class="chip t2">Perplexity</span><span class="chip t2">Glean</span><span class="chip t2">Notion AI</span><span class="chip t2">Jasper</span><span class="chip t2">Writer</span><span class="chip t2">Cohere</span><span class="chip t2">Scale AI</span><span class="chip t2">Harvey AI</span><span class="chip t2">Moveworks</span><span class="chip t2">Aisera</span><span class="chip t2">Hebbia</span><span class="chip t2">LangChain</span><span class="chip t2">LlamaIndex</span><span class="chip t2">Bardeen</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 1</strong><span>Cloud AI platforms</span></div><div class="tier-chips"><span class="chip t2">AWS Bedrock / SageMaker</span><span class="chip t2">Azure OpenAI Service</span><span class="chip t2">Google Vertex AI</span><span class="chip t2">Databricks</span><span class="chip t2">Snowflake ML</span><span class="chip t2">Salesforce Einstein</span><span class="chip t2">Oracle AI Services</span><span class="chip t2">IBM watsonx</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 2</strong><span>Enterprise AI feature teams</span></div><div class="tier-chips"><span class="chip t3">Stripe ML</span><span class="chip t3">Plaid AI</span><span class="chip t3">Brex AI</span><span class="chip t3">Shopify AI</span><span class="chip t3">Figma AI</span><span class="chip t3">Canva AI</span><span class="chip t3">Zoom AI</span><span class="chip t3">HubSpot AI</span><span class="chip t3">Zendesk AI</span><span class="chip t3">Workday AI</span><span class="chip t3">ServiceNow AI</span><span class="chip t3">Veeva AI</span><span class="chip t3">Tempus</span><span class="chip t3">Epic Systems</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 2</strong><span>Rec / search / personalisation</span></div><div class="tier-chips"><span class="chip t3">LinkedIn relevance eng</span><span class="chip t3">Spotify recs</span><span class="chip t3">Netflix personalisation</span><span class="chip t3">Pinterest visual search</span><span class="chip t3">DoorDash ML</span><span class="chip t3">Instacart ML</span><span class="chip t3">Twitter / X ranking</span><span class="chip t3">Reddit recs</span><span class="chip t3">Airbnb search</span><span class="chip t3">Etsy search</span><span class="chip t3">Wayfair ML</span><span class="chip t3">Booking.com ML</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 3</strong><span>Vertical AI startups</span></div><div class="tier-chips"><span class="chip t3">Abridge</span><span class="chip t3">Nabla</span><span class="chip t3">Aidoc</span><span class="chip t3">Instabase</span><span class="chip t3">Cognition (Devin)</span><span class="chip t3">Magic.dev</span><span class="chip t3">Factory AI</span><span class="chip t3">Augment Code</span><span class="chip t3">Tabnine</span><span class="chip t3">CodiumAI</span><span class="chip t3">Synthesia</span><span class="chip t3">D-ID</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 4</strong><span>Adjacent engineering pools</span></div><div class="tier-chips"><span class="chip t4">Google Search eng</span><span class="chip t4">Meta Feed ranking</span><span class="chip t4">Amazon Alexa</span><span class="chip t4">Apple Siri eng</span><span class="chip t4">Backend engineers who shipped LLM features</span><span class="chip t4">Former founders (AI products)</span><span class="chip t4">ML engineers → GenAI transition</span></div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY B CONFERENCES ══ -->
+    <div class="view" id="view-b-conferences">
+      <span class="fbadge fbadge-b">⚙️ B · Engineering / Productization</span>
+      <p class="sl">Conferences &amp; communities — where engineers surface</p>
+      <div class="conf-grid">
+        <div class="conf-card"><h4>AI Engineer Summit</h4><div class="cmeta">Annual · San Francisco <span class="ftag ftb">Family B</span></div><p>The primary conference for applied LLM / GenAI engineers. Speaker list is a sourcing goldmine — practitioners shipping production AI. Highest-density event for this family.</p></div>
+        <div class="conf-card"><h4>Hacker News</h4><div class="cmeta">Monthly threads <span class="ftag ftb">Family B</span></div><p>Show HN posts by engineers building LLM tools are pre-qualified targets. Monthly "Who's hiring" threads surface active candidates.</p></div>
+        <div class="conf-card"><h4>LLM Meetups (local)</h4><div class="cmeta">Ongoing · All major tech hubs <span class="ftag ftb">Family B</span></div><p>SF AI Tinkerers, NYC LLM meetup, London LLM meetup, Berlin AI builders. Sponsor or co-host to get attendee access.</p></div>
+        <div class="conf-card"><h4>Hugging Face community</h4><div class="cmeta">Online + events <span class="ftag ftb">Family B</span></div><p>Model contributors, Space builders, dataset authors. HF community sprints are sourcing events in disguise.</p></div>
+        <div class="conf-card"><h4>Applied ML / MLOps Summit</h4><div class="cmeta">Annual <span class="ftag ftb">Family B</span></div><p>Practitioner-focused. Talks on RAG, evaluation frameworks, production LLM architecture. Less academic, more directly relevant.</p></div>
+        <div class="conf-card"><h4>Kaggle competitions</h4><div class="cmeta">Ongoing <span class="ftag ftb">Family B</span></div><p>NLP and LLM leaderboards surface strong applied ML engineers. Top-100 finishers are worth direct outreach — public proof of skill.</p></div>
+        <div class="conf-card"><h4>Product Hunt / IndieHackers</h4><div class="cmeta">Online <span class="ftag ftb">Family B</span></div><p>Engineers who've launched AI products independently show initiative and full-stack LLM thinking. "AI" category is a continuous sourcing feed.</p></div>
+        <div class="conf-card"><h4>Y Combinator AI batch alumni</h4><div class="cmeta">Biannual batches <span class="ftag ftb">Family B</span></div><p>YC alumni from pivoted/wound-down AI startups are high-conversion — strong skills, product experience, motivated to join a larger platform.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY B CHANNELS ══ -->
+    <div class="view" id="view-b-channels">
+      <span class="fbadge fbadge-b">⚙️ B · Engineering / Productization</span>
+      <p class="sl">Channels — ranked by yield</p>
+      <div class="ch-wrap">
+        <div class="ch-row"><div class="ch-name">GitHub repos</div><div class="ch-detail">Search: llm, langchain, rag, vector-db, llm-evaluation. Repo quality reveals skill faster than any CV.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">Hugging Face</div><div class="ch-detail">Model contributors, dataset authors, Space builders. Sort by downloads and likes. Hands-on builders — exactly the profile you need.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">Technical blog posts</div><div class="ch-detail">Medium, Substack, personal sites. Engineers who write about what they've built signal expertise and communication ability.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Product launch posts</div><div class="ch-detail">Product Hunt, Show HN, LinkedIn shipping posts. Full-stack AI thinking and initiative in one place.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Employee referrals</div><div class="ch-detail">Highest-conversion source. Run a quarterly referral push — not just at req open.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">AI / LLM meetups</div><div class="ch-detail">Speakers and regular attendees self-select as practitioners. Build a talent list at every event.</div><div class="ch-eff mid">Medium</div></div>
+        <div class="ch-row"><div class="ch-name">Hacker News</div><div class="ch-detail">"Who's hiring" threads, Show HN posts, comment authors on AI threads.</div><div class="ch-eff mid">Medium</div></div>
+        <div class="ch-row"><div class="ch-name">LinkedIn Recruiter</div><div class="ch-detail">Use as contact layer after identifying candidates elsewhere. Cold InMail without personalisation performs poorly.</div><div class="ch-eff mid">Medium</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY B PLAYBOOK ══ -->
+    <div class="view" id="view-b-playbook">
+      <span class="fbadge fbadge-b">⚙️ B · Engineering / Productization</span>
+      <div class="pb2">
+        <div class="pbcard"><h4>What to look for</h4><ul><li>LLM integration — RAG, orchestration, evals</li><li>Production deployment experience</li><li>Vector DB / retrieval systems</li><li>Python + APIs at scale</li><li>Evaluation framework design</li><li>Experimentation mindset</li></ul></div>
+        <div class="pbcard"><h4>Adjacent profiles</h4><ul><li>Backend engineers who shipped AI features</li><li>ML engineers from rec / personalisation</li><li>Full-stack builders of AI products</li><li>Solutions architects gone hands-on</li><li>Former founders with AI products</li></ul></div>
+      </div>
+      <p class="sl">Messaging angle</p>
+      <div class="msg msg-b">Lead with scale and ownership — enterprise use cases, real-world impact, ability to shape platform architecture (not just feature work). Name the stack. Mention the production problem they'll actually solve.</div>
+      <p class="sl">Outreach template</p>
+      <div class="ot">
+        <div class="subj">Subject: Your <span class="ph">[repo / post / project]</span> — quick question</div>
+        <div class="body">Hi <span class="ph">[name]</span>,
+
+Came across your <span class="ph">[GitHub project / blog post / Hugging Face model]</span> — the way you approached <span class="ph">[specific technical detail]</span> is exactly the kind of thinking we need on our team.
+
+We're building <span class="ph">[brief product context]</span> and hitting real scale problems in <span class="ph">[inference latency / eval pipelines / retrieval accuracy]</span>. This isn't a feature-team role — it's platform-level ownership with a small, senior eng group.
+
+Open to a quick call this week?</div>
+      </div>
+      <p class="sl">Interview blockers &amp; calibration fixes</p>
+      <div class="bl-grid">
+        <div class="bl-card warn"><div class="blbl">Common blockers</div><ul><li>HM rejects adjacent profiles without reading them</li><li>Loop includes irrelevant ML theory questions</li><li>Unclear AI Engineer vs ML Engineer track</li><li>Comp benchmarked against non-AI engineers</li><li>Take-home too long — top candidates drop off</li></ul></div>
+        <div class="bl-card fix"><div class="blbl">Calibration fixes</div><ul><li>Show HM 3 adjacent profiles before screening</li><li>Replace theory with a real system design task</li><li>Define the "must-have production AI" bar explicitly</li><li>Benchmark comp against AI-specific bands</li><li>Cap take-home at 2 hours with a clear scope brief</li></ul></div>
+      </div>
+      <p class="sl">HM calibration questions</p>
+      <div class="calib">
+        <div class="calib-row"><div class="cq">AI Engineer vs ML Engineer — what's the difference here?</div><div class="ca">Forces clarity: integration-heavy (RAG, evals) vs model-heavy (training, fine-tuning). Two very different talent pools.</div></div>
+        <div class="calib-row"><div class="cq">What does "production AI experience" mean to you?</div><div class="ca">Some HMs mean any shipped feature. Others mean billions of requests. Define this before sourcing.</div></div>
+        <div class="calib-row"><div class="cq">Would you consider a strong backend engineer who built LLM features?</div><div class="ca">If yes, opens the adjacent pool. If no, get the specific gap in writing.</div></div>
+        <div class="calib-row"><div class="cq">What's the first project this person would own?</div><div class="ca">Converts vague role scope into a concrete story for outreach and interviews.</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY B CONVERSION ══ -->
+    <div class="view" id="view-b-conversion">
+      <span class="fbadge fbadge-b">⚙️ B · Engineering / Productization</span>
+      <p class="sl">Stage-by-stage conversion expectations</p>
+      <div class="cv-wrap">
+        <div class="cv-hdr"><div class="cv-cell h lbl">Stage</div><div class="cv-cell h">Rate</div><div class="cv-cell h">Key driver</div><div class="cv-cell h">Watch out for</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Outreach → response</div><div class="cv-cell rate">25–45%<div class="bar"><div class="bf" style="width:35%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Reference their specific repo or post. Generic InMails: &lt;10%</div><div class="cv-cell">Over-templated messages — engineers share bad outreach</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Response → screen</div><div class="cv-cell rate">65–80%<div class="bar"><div class="bf" style="width:72%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Tell them the role and first project upfront</div><div class="cv-cell">Ambiguous JD — if they can't picture the work, they don't show</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Screen → HM review</div><div class="cv-cell rate">45–60%<div class="bar"><div class="bf" style="width:52%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Pre-aligned profile bar — adjacent acceptance committed upfront</div><div class="cv-cell">HM rejects adjacent profiles on sight</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">HM review → interview</div><div class="cv-cell rate">55–70%<div class="bar"><div class="bf" style="width:62%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Technical screen is a real systems or debugging problem</div><div class="cv-cell">Take-home over 3 hours — senior candidates drop here most</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Interview → offer</div><div class="cv-cell rate">30–50%<div class="bar"><div class="bf" style="width:40%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Scorecard aligned on "production AI experience" definition</div><div class="cv-cell">One interviewer on theory, another on systems design</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Offer → accept</div><div class="cv-cell rate">60–75%<div class="bar"><div class="bf" style="width:67%;background:var(--accent-b)"></div></div></div><div class="cv-cell">Ownership narrative — shape the platform, not a feature team</div><div class="cv-cell">Competing offers — most in-demand profile in the market</div></div>
+      </div>
+      <div class="g3">
+        <div class="tcard"><h4>Time benchmarks</h4><div class="trow"><span class="tlbl">Outreach to slate</span><span class="tval">3–5 wks</span></div><div class="trow"><span class="tlbl">Slate to offer</span><span class="tval">2–4 wks</span></div><div class="trow"><span class="tlbl">Offer to start</span><span class="tval">2–6 wks<span class="wpill">counter risk</span></span></div><div class="trow"><span class="tlbl">Total time to fill</span><span class="tval">7–14 wks</span></div></div>
+        <div class="tcard"><h4>Volume benchmarks</h4><div class="trow"><span class="tlbl">Talent map size</span><span class="tval">120–200</span></div><div class="trow"><span class="tlbl">Outreach to send</span><span class="tval">50–80</span></div><div class="trow"><span class="tlbl">Screens to slate</span><span class="tval">10–16</span></div><div class="trow"><span class="tlbl">Interviews to offer</span><span class="tval">5–10</span></div></div>
+        <div class="tcard"><h4>Market signals</h4><div class="trow"><span class="tlbl">Startup funding rounds</span><span class="tval">Monitor weekly</span></div><div class="trow"><span class="tlbl">Layoff trackers</span><span class="tval">Surge windows</span></div><div class="trow"><span class="tlbl">New model releases</span><span class="tval">Triggers job moves</span></div><div class="trow"><span class="tlbl">Counter-offer risk</span><span class="tval">High</span></div></div>
+      </div>
+      <p class="sl">Success story</p>
+      <div class="story"><div class="story-row">
+        <div class="scell"><div class="slbl">Challenge</div><p>Applied AI Engineer role low traction — targeting only big-tech GenAI alumni. Response rate under 8% after 4 weeks.</p></div>
+        <div class="scell"><div class="slbl">Strategy &amp; execution</div><p>Expanded to search, rec, and platform engineers who shipped LLM features. Built 150-company target map. Rewrote outreach around platform ownership.</p></div>
+        <div class="scell"><div class="slbl">Outcome</div><p>Qualified response rate tripled. Stronger slate faster. 100% of hires from adjacent pool that had been entirely overlooked.</p></div>
+      </div></div>
+      <div class="mrow">
+        <div class="mcard"><div class="mv">3×</div><div class="ml">Qualified response rate lift</div></div>
+        <div class="mcard"><div class="mv">150</div><div class="ml">Company target map size</div></div>
+        <div class="mcard"><div class="mv">100%</div><div class="ml">Hire from adjacent pool</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY C COMPANIES ══ -->
+    <div class="view" id="view-c-companies">
+      <span class="fbadge fbadge-c">🏗️ C · Platform / Infrastructure</span>
+      <div class="legend">
+        <div class="leg"><div class="ldot" style="background:var(--accent-c)"></div>Tier 1 — core target, direct profile match</div>
+        <div class="leg"><div class="ldot" style="background:#f5b88c"></div>Tier 2 — strong adjacent, ML infra exposure</div>
+        <div class="leg"><div class="ldot" style="background:var(--accent-a)"></div>Tier 3 — high-value adjacency (HPC / SRE)</div>
+        <div class="leg"><div class="ldot" style="background:var(--subtle)"></div>Tier 4 — internal &amp; non-traditional</div>
+      </div>
+      <div class="tier-wrap">
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 1</strong><span>AI compute &amp; MLOps vendors</span></div><div class="tier-chips"><span class="chip t1">Anyscale (Ray)</span><span class="chip t1">Modal</span><span class="chip t1">Replicate</span><span class="chip t1">BentoML</span><span class="chip t1">Weights &amp; Biases</span><span class="chip t1">Comet ML</span><span class="chip t1">Determined AI (HPE)</span><span class="chip t1">OctoAI</span><span class="chip t1">Baseten</span><span class="chip t1">Fireworks AI</span><span class="chip t1">Together AI</span><span class="chip t1">LeptonAI</span><span class="chip t1">Skypilot</span><span class="chip t1">Dstack</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 1</strong><span>Hyperscaler ML infra orgs</span></div><div class="tier-chips"><span class="chip t1">Google TPU / TF infra</span><span class="chip t1">Meta AI Infra (PyTorch)</span><span class="chip t1">Microsoft Azure ML Platform</span><span class="chip t1">Amazon EC2 / SageMaker infra</span><span class="chip t1">Apple ML Platform</span><span class="chip t1">NVIDIA DGX / Triton team</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 2</strong><span>Large-scale ML platform orgs</span></div><div class="tier-chips"><span class="chip t2">Uber Michelangelo</span><span class="chip t2">Airbnb ML infra</span><span class="chip t2">Netflix ML platform</span><span class="chip t2">LinkedIn AI platform</span><span class="chip t2">Pinterest ML infra</span><span class="chip t2">Lyft data platform</span><span class="chip t2">DoorDash ML platform</span><span class="chip t2">Twitter / X infra</span><span class="chip t2">Snap AI infra</span><span class="chip t2">Spotify infra</span><span class="chip t2">Booking.com ML platform</span><span class="chip t2">Wayfair ML platform</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 2</strong><span>Data &amp; infra tooling cos</span></div><div class="tier-chips"><span class="chip t2">Databricks (Spark / MLflow)</span><span class="chip t2">dbt Labs</span><span class="chip t2">Pinecone</span><span class="chip t2">Weaviate</span><span class="chip t2">Chroma</span><span class="chip t2">Qdrant</span><span class="chip t2">Milvus / Zilliz</span><span class="chip t2">Redis AI</span><span class="chip t2">Tecton</span><span class="chip t2">Hopsworks</span><span class="chip t2">Feast</span><span class="chip t2">Prefect</span><span class="chip t2">Dagster</span><span class="chip t2">Astronomer (Airflow)</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 3</strong><span>HPC &amp; scientific compute</span></div><div class="tier-chips"><span class="chip t3">Argonne National Lab</span><span class="chip t3">Oak Ridge National Lab</span><span class="chip t3">Lawrence Berkeley NERSC</span><span class="chip t3">Sandia National Labs</span><span class="chip t3">Los Alamos National Lab</span><span class="chip t3">CERN (compute team)</span><span class="chip t3">NASA JPL compute</span><span class="chip t3">NIH / NCI compute</span><span class="chip t3">Academic HPC centres</span><span class="chip t3">Renaissance Technologies</span><span class="chip t3">Two Sigma (infra)</span><span class="chip t3">Citadel (infra)</span></div></div>
+        <div class="tier-row"><div class="tier-lbl"><strong>Tier 4</strong><span>SRE / systems adjacency</span></div><div class="tier-chips"><span class="chip t4">Senior SREs supporting ML workloads</span><span class="chip t4">Data engineers building ML pipelines</span><span class="chip t4">Systems engineers w/ GPU / perf focus</span><span class="chip t4">Compiler / runtime engineers</span><span class="chip t4">Internal mobility (infra → ML infra)</span></div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY C CONFERENCES ══ -->
+    <div class="view" id="view-c-conferences">
+      <span class="fbadge fbadge-c">🏗️ C · Platform / Infrastructure</span>
+      <p class="sl">Conferences &amp; communities — where infra engineers surface</p>
+      <div class="conf-grid">
+        <div class="conf-card"><h4>MLSys</h4><div class="cmeta">Annual · Mar · Rotating US <span class="ftag ftc">Family C</span></div><p>The definitive ML systems conference. Every speaker and author is a pre-qualified Tier 1 target. Papers on model serving, training efficiency, and distributed ML.</p></div>
+        <div class="conf-card"><h4>NVIDIA GTC</h4><div class="cmeta">Annual · Mar · San Jose + virtual <span class="ftag ftc">Family C</span></div><p>10,000+ GPU and AI infra engineers. Sponsor sessions give access to attendee and speaker lists.</p></div>
+        <div class="conf-card"><h4>KDD</h4><div class="cmeta">Annual · Aug · Rotating global <span class="ftag ftc">Family C</span></div><p>Data mining and ML at scale. Industry day speakers are practitioners — highest-value sourcing window at this event.</p></div>
+        <div class="conf-card"><h4>SC (Supercomputing)</h4><div class="cmeta">Annual · Nov · Rotating US <span class="ftag ftc">Family C</span></div><p>The HPC community's main event. Best pool for Tier 3 HPC-to-ML adjacency conversions.</p></div>
+        <div class="conf-card"><h4>SREcon</h4><div class="cmeta">3x annual · Americas / EMEA / APAC <span class="ftag ftc">Family C</span></div><p>SRE and infrastructure reliability community. Speakers running ML workload reliability are prime Tier 4 adjacency candidates.</p></div>
+        <div class="conf-card"><h4>Ray Summit</h4><div class="cmeta">Annual · San Francisco <span class="ftag ftc">Family C</span></div><p>Distributed ML compute focused on Ray ecosystem. GitHub contributor list for Ray is a parallel sourcing channel.</p></div>
+        <div class="conf-card"><h4>vLLM / Triton community</h4><div class="cmeta">Online + summits <span class="ftag ftc">Family C</span></div><p>Contributors to vLLM, Triton, CUTLASS, FlashAttention, DeepSpeed are Tier 1 inference and kernel engineering targets. All public.</p></div>
+        <div class="conf-card"><h4>PyData / Data Council</h4><div class="cmeta">Annual · Multiple locations <span class="ftag ftc">Family C</span></div><p>Surfaces data engineers building ML pipelines — the primary Tier 4 adjacent pool for feature store and ML data platform roles.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY C CHANNELS ══ -->
+    <div class="view" id="view-c-channels">
+      <span class="fbadge fbadge-c">🏗️ C · Platform / Infrastructure</span>
+      <p class="sl">Channels — ranked by yield</p>
+      <div class="ch-wrap">
+        <div class="ch-row"><div class="ch-name">GitHub — systems repos</div><div class="ch-detail">Search: CUDA, Triton, CUTLASS, vLLM, TensorRT, Ray, distributed training. Contributor quality is immediately visible.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">MLSys / GTC / KDD</div><div class="ch-detail">Speaker lists and proceedings are public. These candidates rarely appear on LinkedIn title searches.</div><div class="ch-eff hi">Highest</div></div>
+        <div class="ch-row"><div class="ch-name">Infra engineering blogs</div><div class="ch-detail">Company eng blogs (Uber, Meta, Netflix, Airbnb) name engineers directly. A blog post author = pre-qualified candidate.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Ray / Triton / vLLM communities</div><div class="ch-detail">GitHub issues, Discord/Slack. Map top 20–30 contributors per project — all public.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">Internal mobility</div><div class="ch-detail">SREs supporting ML workloads and data engineers building pipelines. Most orgs don't ask — ask first.</div><div class="ch-eff hi">High</div></div>
+        <div class="ch-row"><div class="ch-name">NVIDIA developer forums</div><div class="ch-detail">CUDA dev forums, GTC attendees, DLI alumni. Niche but highly targeted — hardware level practitioners.</div><div class="ch-eff mid">Medium</div></div>
+        <div class="ch-row"><div class="ch-name">HPC alumni networks</div><div class="ch-detail">National lab alumni LinkedIn groups, SC conference community. Often overlooked — strong comp motivation.</div><div class="ch-eff mid">Medium</div></div>
+        <div class="ch-row"><div class="ch-name">LinkedIn Recruiter</div><div class="ch-detail">"MLOps Engineer" title is inconsistently used. Source the name first, use LinkedIn to reach out.</div><div class="ch-eff lo">Lower</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY C PLAYBOOK ══ -->
+    <div class="view" id="view-c-playbook">
+      <span class="fbadge fbadge-c">🏗️ C · Platform / Infrastructure</span>
+      <div class="pb2">
+        <div class="pbcard"><h4>What to look for</h4><ul><li>Distributed systems at ML scale</li><li>GPU utilisation / CUDA / XLA</li><li>Model serving &amp; inference optimisation</li><li>Training pipeline engineering</li><li>Data infra for ML (feature stores etc.)</li><li>Reliability / SRE mindset</li></ul></div>
+        <div class="pbcard"><h4>Adjacent profiles</h4><ul><li>SREs transitioning to ML infra</li><li>Data engineers moving into ML platforms</li><li>Systems engineers with perf focus</li><li>HPC / scientific computing engineers</li><li>Compiler / runtime engineers</li></ul></div>
+      </div>
+      <p class="sl">Messaging angle</p>
+      <div class="msg msg-c">Lead with technical depth and novel scale — inference latency at billions of requests, GPU cluster orchestration, training pipeline reliability. Name the actual scale and stack. Do not lead with mission or product vision alone.</div>
+      <p class="sl">Outreach template</p>
+      <div class="ot">
+        <div class="subj">Subject: Hard infra problem — think your background is relevant</div>
+        <div class="body">Hi <span class="ph">[name]</span>,
+
+Your work on <span class="ph">[specific system / repo / talk / blog post]</span> caught my attention — particularly how you handled <span class="ph">[latency / scheduling / throughput challenge]</span>.
+
+We're running into a genuinely hard problem in <span class="ph">[inference serving at scale / GPU cluster scheduling / training pipeline reliability]</span>. Small infra team, high ownership, direct path to shaping the platform architecture.
+
+This isn't a ticket-driven role. Would you be open to a 20-minute call?</div>
+      </div>
+      <p class="sl">Interview blockers &amp; calibration fixes</p>
+      <div class="bl-grid">
+        <div class="bl-card warn"><div class="blbl">Common blockers</div><ul><li>JD reads like a generic SRE or DevOps posting</li><li>HM rejects SRE adjacencies without rationale</li><li>Interview tests systems theory, not ML systems</li><li>HPC candidates not considered at all</li><li>Comp benchmarked too low vs AI infra market</li></ul></div>
+        <div class="bl-card fix"><div class="blbl">Calibration fixes</div><ul><li>Rewrite JD around actual ML infra problems</li><li>Add SRE-to-MLOps as explicit "adjacent accepted" profile</li><li>Design interview around a real serving or scheduling challenge</li><li>Include HPC engineers in target company map from the start</li><li>Benchmark comp against MLOps / AI infra bands specifically</li></ul></div>
+      </div>
+      <p class="sl">HM calibration questions</p>
+      <div class="calib">
+        <div class="calib-row"><div class="cq">What's the hardest systems problem on the roadmap?</div><div class="ca">The answer becomes your sourcing brief and every outreach message. If HM can't articulate it, the intake isn't done.</div></div>
+        <div class="calib-row"><div class="cq">Would you consider an SRE moving toward ML infra?</div><div class="ca">Unlocks the largest adjacent pool — get explicit buy-in before sourcing this profile.</div></div>
+        <div class="calib-row"><div class="cq">Training infra vs inference serving vs data platform — what's the priority?</div><div class="ca">These are different talent pools. Force the ranking before sourcing starts.</div></div>
+        <div class="calib-row"><div class="cq">What does success look like at 6 months?</div><div class="ca">Converts vague infra scope into a concrete outcome for outreach and the interview scorecard.</div></div>
+      </div>
+    </div>
+
+    <!-- ══ FAMILY C CONVERSION ══ -->
+    <div class="view" id="view-c-conversion">
+      <span class="fbadge fbadge-c">🏗️ C · Platform / Infrastructure</span>
+      <p class="sl">Stage-by-stage conversion expectations</p>
+      <div class="cv-wrap">
+        <div class="cv-hdr"><div class="cv-cell h lbl">Stage</div><div class="cv-cell h">Rate</div><div class="cv-cell h">Key driver</div><div class="cv-cell h">Watch out for</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Outreach → response</div><div class="cv-cell rate">20–35%<div class="bar"><div class="bf" style="width:27%;background:var(--accent-c)"></div></div></div><div class="cv-cell">Name the specific technical problem in the first line</div><div class="cv-cell">Generic "exciting opportunity" — very low tolerance</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Response → screen</div><div class="cv-cell rate">60–70%<div class="bar"><div class="bf" style="width:65%;background:var(--accent-c)"></div></div></div><div class="cv-cell">Send the actual systems challenge before the call</div><div class="cv-cell">Recruiter doesn't understand the technical context</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Screen → HM review</div><div class="cv-cell rate">40–55%<div class="bar"><div class="bf" style="width:47%;background:var(--accent-c)"></div></div></div><div class="cv-cell">SRE and HPC backgrounds explicitly flagged as in-scope</div><div class="cv-cell">HM filtering on "must have MLOps Engineer on CV"</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">HM review → interview</div><div class="cv-cell rate">50–65%<div class="bar"><div class="bf" style="width:57%;background:var(--accent-c)"></div></div></div><div class="cv-cell">Interview is a real system design problem</div><div class="cv-cell">Theoretical distributed systems trivia</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Interview → offer</div><div class="cv-cell rate">30–45%<div class="bar"><div class="bf" style="width:37%;background:var(--accent-c)"></div></div></div><div class="cv-cell">Consistent scorecard across hardware, systems, and ML domains</div><div class="cv-cell">Training vs serving vs data platform debated post-loop</div></div>
+        <div class="cv-row"><div class="cv-cell lbl">Offer → accept</div><div class="cv-cell rate">60–75%<div class="bar"><div class="bf" style="width:67%;background:var(--accent-c)"></div></div></div><div class="cv-cell">Problem complexity + eng culture + ownership. Comp must match AI infra bands.</div><div class="cv-cell">Under-benchmarked comp vs hyperscalers</div></div>
+      </div>
+      <div class="g3">
+        <div class="tcard"><h4>Time benchmarks</h4><div class="trow"><span class="tlbl">Outreach to slate</span><span class="tval">4–7 wks</span></div><div class="trow"><span class="tlbl">Slate to offer</span><span class="tval">3–5 wks</span></div><div class="trow"><span class="tlbl">Offer to start</span><span class="tval">3–8 wks<span class="wpill">notice</span></span></div><div class="trow"><span class="tlbl">Total time to fill</span><span class="tval">10–18 wks</span></div></div>
+        <div class="tcard"><h4>Volume benchmarks</h4><div class="trow"><span class="tlbl">Talent map size</span><span class="tval">60–120</span></div><div class="trow"><span class="tlbl">Outreach to send</span><span class="tval">30–55</span></div><div class="trow"><span class="tlbl">Screens to slate</span><span class="tval">6–12</span></div><div class="trow"><span class="tlbl">Interviews to offer</span><span class="tval">4–7</span></div></div>
+        <div class="tcard"><h4>Market signals</h4><div class="trow"><span class="tlbl">Hyperscaler reorgs</span><span class="tval">Monitor monthly</span></div><div class="trow"><span class="tlbl">MLOps vendor funding</span><span class="tval">Triggers mobility</span></div><div class="trow"><span class="tlbl">GPU availability news</span><span class="tval">Affects urgency</span></div><div class="trow"><span class="tlbl">Counter-offer risk</span><span class="tval">High</span></div></div>
+      </div>
+      <p class="sl">Success story</p>
+      <div class="story"><div class="story-row">
+        <div class="scell"><div class="slbl">Challenge</div><p>ML Infra Engineer role open 11 weeks with no viable slate. JD written like a generic SRE posting. No adjacent backgrounds considered.</p></div>
+        <div class="scell"><div class="slbl">Strategy &amp; execution</div><p>Rewrote intake around specific infra problems. Mapped SRE-to-MLOps transitions and HPC engineers from compute startups and national labs. Outreach led with the systems challenge.</p></div>
+        <div class="scell"><div class="slbl">Outcome</div><p>First qualified slate in 12 days after reset. 2 of 3 finalists from outside the traditional ML infra pool. Offer accepted by an HPC-to-ML transition hire.</p></div>
+      </div></div>
+      <div class="mrow">
+        <div class="mcard"><div class="mv">12d</div><div class="ml">Days to slate after reset</div></div>
+        <div class="mcard"><div class="mv">11wk</div><div class="ml">Prior time with no viable slate</div></div>
+        <div class="mcard"><div class="mv">2 of 3</div><div class="ml">Finalists from adjacent pools</div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer style="border-top:1px solid var(--border);padding:24px 40px;display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto">
+  <div style="font-family:var(--serif);font-size:14px;color:var(--muted)">Talent AI <span style="font-style:italic;color:var(--accent-a)">Lab</span></div>
+  <div style="font-size:11px;color:var(--subtle)">3 families · 7-step strategy · Full playbook · Rosy Bhullar</div>
+</footer>
+
+<script>
+function showView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('view-' + id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
